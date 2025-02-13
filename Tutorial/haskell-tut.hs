@@ -85,9 +85,9 @@ floorVal = floor 9.999 -- 9
 -- Also sin, cos, tan, asin, atan, acos, sinh, tanh, cosh, asinh, atanh, acosh
 
 -- LOGICAL OPERATORS
-trueAndFalse = True && False -- False
-trueOrFalse = True || False -- True
-notTrue = not(True) -- False
+trueAndFalse = True && False -- False, AND
+trueOrFalse = True || False -- True, OR
+notTrue = not(True) -- False, NOT
 
 -- LISTS - Linked list
 -- Lists are homogenous, they can only store one type of data
@@ -162,31 +162,39 @@ namesNAddress = zip names addresses -- [("Bob","123 Main"),("Mary","234 North"),
 addMe :: Int -> Int -> Int -- Function declaration, takes two Ints and returns an Int
 -- funcName param1 param2 = operations (returned value)
 addMe x y = x + y -- Function definition, add x and y
+-- e.g. addMe 1 2 -> 3
 
 sumMe x y = x + y -- Inferred type declaration, Haskell can determine the type of the variable stored in it
+-- e.g. sumMe 1 2 -> 3
 
 addTuples :: (Int, Int) -> (Int, Int) -> (Int, Int) -- Function declaration, takes two tuples and returns a tuple
 addTuples (x, y) (x2, y2) = (x + x2, y + y2) -- Function definition, add the values of the tuples
+-- e.g. addTuples (1,2) (3,4) -> (4,6)
 
 whatAge :: Int -> String -- Function declaration, takes an Int and returns a String
--- Similar to a switch statement in other languages but in Haskell, it is called pattern matching
+-- Kind of switch statement in other languages but in Haskell, it is called pattern matching
 whatAge 16 = "You can drive" 
 whatAge 18 = "You can vote"
 whatAge 21 = "You're an adult"
 whatAge x = "Nothing important" -- Default case
+-- e.g. whatAge 16 -> "You can drive"
 
 factorial :: Int -> Int -- Function declaration, takes an Int and returns an Int
 factorial 0 = 1
 factorial n = n * factorial (n - 1) -- Recursion, calls the function within itself
+-- e.g. factorial 5 -> 120
 
 prodFact n = product [1..n] -- Function definition, product of all the values from 1 to n
+-- e.g. prodFact 5 -> 120
 
 isOdd :: Int -> Bool -- Function declaration, takes an Int and returns a Bool
 isOdd n -- Function definition using guards (|)
     | n `mod` 2 == 0 = False -- Check if n is even, if it is return False. Guard part of the function
     | otherwise = True -- n is odd, return True. otherwise is a catch all case or default case
+-- e.g. isOdd 3 -> True
 
 isEven n = n `mod` 2 == 0 -- Function definition, check if n is even
+-- e.g. isEven 4 -> True
 
 whatGrade :: Int -> String -- Function declaration, takes an Int and returns a String
 whatGrade age -- if/else alternative, called guards (|). Reminds me of a ternary operator
@@ -195,6 +203,7 @@ whatGrade age -- if/else alternative, called guards (|). Reminds me of a ternary
     | (age > 10) && (age <= 14) = "Middle School"
     | (age > 14) && (age <= 18) = "High School"
     | otherwise = "Go to college" -- Default case
+-- e.g. whatGrade 5 -> "Kindergarten"
 
 batAvgRating :: Double -> Double -> String -- Function declaration, takes two Doubles and returns a String
 batAvgRating hits atBats -- Function with a local variable (avg) using where
@@ -203,6 +212,7 @@ batAvgRating hits atBats -- Function with a local variable (avg) using where
     | avg <= 0.280 = "You're doing pretty good"
     | otherwise = "You're a Superstar"
     where avg = hits / atBats -- where is used to define variables that can be used throughout the function
+-- e.g. batAvgRating 100 300 -> "You're doing pretty good"
 
 getListItems :: [Int] -> String -- Function declaration, takes a list of Ints and returns a String
 -- Pattern matching
@@ -210,11 +220,209 @@ getListItems [] = "Your list is empty" -- If the list is empty
 getListItems (x:[]) = "Your list starts with " ++ show x -- If the list has only one value
 getListItems (x:y:[]) = "Your list contains " ++ show x ++ " and " ++ show y -- If the list has two values
 getListItems (x:xs) = "The 1st item is " ++ show x ++ " and the rest are " ++ show xs -- If the list has more than two values
+-- e.g. getListItems [1,2,3] -> "The 1st item is 1 and the rest are [2,3]"
 
 getFirstItem :: String -> String -- Function declaration, takes a String and returns a String
 -- Pattern matching
 getFirstItem [] = "Empty String" -- If the string is empty
-getFirstItem all@(x:xs) = "The first letter in " ++ all ++ " is " ++ [x] -- If the string is not empty, get the first letter of the string and store the rest of the string in all using aliasing (@)
+getFirstItem all@(x:xs) = "The first letter in " ++ all ++ " is " ++ [x] -- If the string is not empty, get the first letter of the string and assign the rest in xs, The complete string is stored in all using aliasing/as (@)
+-- e.g. getFirstItem "Hello" -> "The first letter in Hello is H"
+
+-- HIGHER ORDER FUNCTIONS
+times4 :: Int -> Int -- Function declaration, takes an Int and returns an Int
+times4 x = x * 4 -- Function definition, multiply x by 4
+-- e.g. times4 5 -> 20
+
+listTimes4 = map times4 [1, 2, 3, 4, 5] -- [4,8,12,16,20], map applies the function to every element in the list
+
+multBy4 :: [Int] -> [Int] -- Function declaration, takes a list of Ints and returns a list of Ints
+multBy4 [] = [] -- If the list is empty, return an empty list, base case
+multBy4 (x:xs) = times4 x : multBy4 xs -- Multiply the first value of the list by 4 and add it to the list, then call the function again with the rest of the list
+
+areStringsEq :: [Char] -> [Char] -> Bool -- Function declaration, takes two lists of Chars and returns a Bool
+areStringsEq [] [] = True -- If both lists are empty, return True
+areStringsEq (x:xs) (y:ys) = x == y && areStringsEq xs ys -- Check if the first elements of both lists are equal and call the function again with the rest of the lists
+areStringsEq _ _ = False -- Catch all case e.g. mismatch length, if the lists are not equal, return False. _ is a wildcard character that matches anything and is used when you don't care about the value
+-- e.g. areStringsEq "hello" "hello" -> True
+
+doMult :: (Int -> Int) -> Int -- Function declaration, takes a function that takes an Int and returns an Int and returns an Int
+doMult func = func 3 -- Call the function with 3
+
+num3Times4 = doMult times4 -- 12, call the function doMult with the function times4
+
+getAddFunc :: Int -> (Int -> Int) -- Function declaration, takes an Int and returns a function that takes an Int and returns an Int
+getAddFunc x y = x + y -- Function definition, add x and y
+
+adds3 = getAddFunc 3 -- Function that adds 3 to a number
+fourPlus3 = adds3 4 -- 7, call the function adds3 with 4
+threePlusList = map adds3 [1,2,3,4,5] -- [4,5,6,7,8], map applies the function adds3 to every element in the list
+
+-- LAMBDA FUNCTIONS - Anonymous functions (\)
+dbl1To10 = map (\x -> x * 2) [1..10] -- [2,4,6,8,10,12,14,16,18,20], map applies the lambda function to every element in the list
+
+-- CONDITIONALS
+{-
+    < less than,
+    > greater than,
+    <= less than or equal to,
+    >= greater than or equal to,
+    == equal to,
+    /= not equal to
+-}
+
+-- IF STATEMENTS
+doubleEvenNumber y =
+    if (y `mod` 2 /= 0) -- Check if y is not even
+        then y -- If y is not even, return y
+        else y * 2 -- If y is even, return y multiplied by 2
+
+getClass :: Int -> String -- Function declaration, takes an Int and returns a String
+getClass n = case n of -- Switch statement in Haskell
+    5 -> "Go to Kindergarten"
+    6 -> "Go to elementary school"
+    _ -> "Go away" -- Default case
+
+-- MODULES
+{-
+    A module is a collection of related functions, types, and typeclasses. A Haskell program is a collection of modules where the main module loads up the other modules and then uses the functions defined in them to do something.
+
+    DEFINING MODULES (Define a module called SampFunctions and export the functions getClass and doubleEvenNumber. Put this at the top of the file): 
+    module SampFunctions (getClass, doubleEvenNumber) where 
+
+    IMPORTING MODULES (Import the entire module):
+    import SampFunctions
+-}
+
+-- ENUMERATED TYPES (ENUMS)
+data BaseballPlayer = Pitcher -- Data type declaration, BaseballPlayer is a type that can be Pitcher, Catcher, Infielder, or Outfield
+                    | Catcher
+                    | Infielder
+                    | Outfield
+                deriving Show 
+                {- 
+                    deriving Show is used to display the data type in the console. 
+                    Without it, manual implementation of the Show typeclass is required 
+                    e.g. instance Show BaseballPlayer where show Outfield = "Outfield"
+                -}
+
+barryBonds :: BaseballPlayer -> Bool -- Function declaration, takes a BaseballPlayer and returns a Bool
+barryBonds Outfield = True -- If the player is an outfielder, return True
+
+barryInOf = print(barryBonds Outfield) -- True, call the function barryBonds with Outfield
+
+-- CUSTOM DATA TYPES (STRUCTS)
+data Customer = Customer String String Double -- Data type declaration, Customer is a type that has a String, String, and Double
+    deriving Show -- Show is used to display the data type in the console
+
+tomSmith :: Customer
+tomSmith = Customer "Tom Smith" "123 Main" 20.50 -- Create a Customer with the values "Tom Smith" NAME, "123 Main" ADDRESS, and 20.50 BALANCE
+
+getBalance :: Customer -> Double -- Function declaration, takes a Customer and returns a Double
+getBalance (Customer _ _ b) = b -- Get the balance of the Customer
+
+data RPS = Rock | Paper | Scissors -- Data type declaration, RPS is a type that can be Rock, Paper, or Scissors
+
+shoot :: RPS -> RPS -> String -- Function declaration, takes two RPS and returns a String
+shoot Paper Rock = "Paper beats Rock" -- If the first player chooses Paper and the second player chooses Rock, Paper wins
+shoot Rock Scissors = "Rock beats Scissors" -- If the first player chooses Rock and the second player chooses Scissors, Rock wins
+shoot Scissors Paper = "Scissors beats Paper" -- If the first player chooses Scissors and the second player chooses Paper, Scissors wins
+shoot Scissors Rock = "Rock beats Scissors" -- If the first player chooses Scissors and the second player chooses Rock, Rock wins
+shoot Paper Scissors = "Scissors beats Paper" -- If the first player chooses Paper and the second player chooses Scissors, Scissors wins
+shoot Rock Paper = "Paper beats Rock" -- If the first player chooses Rock and the second player chooses Paper, Paper wins
+shoot _ _ = "Error" -- Catch all case, if the players choose the same thing, return Error
+-- e.g. shoot Rock Paper -> "Paper beats Rock"
+
+data Shape = Circle Float Float Float | Rectangle Float Float Float Float -- Data type declaration, Shape is a type that can be a Circle or Rectangle
+    deriving Show -- Show is used to display the data type in the console
+
+area :: Shape -> Float -- Function declaration, takes a Shape and returns a Float
+area (Circle _ _ r) = pi * r ^ 2 -- Calculate the area of a Circle
+area (Rectangle x y x2 y2) = (abs (x2 - x)) * (abs (y2 - y)) -- Calculate the area of a Rectangle.
+--  $ sign can be used to avoid parentheses e.g. area (Rectangle x y x2 y2) = (abs $ x2 - x) * (abs $ y2 - y), $ means anything that comes after it takes precedence over anything that comes before it
+
+sumValue = putStrLn (show (1 + 2)) -- 3, show is used to convert the result of the operation to a string
+sumValue2 = putStrLn . show $ 1 + 2 -- 3, . is used to chain functions together, $ is used to avoid parentheses
+
+areaOfCircle = area (Circle 50 60 20) -- 1256.637, calculate the area of a Circle
+areaOfRect = area (Rectangle 10 10 100 100) -- 8100.0, calculate the area of a Rectangle
+
+data Employee = Employee {
+    name :: String,
+    position :: String,
+    idNum :: Int
+} deriving (Eq, Show) -- Eq is used to compare two values for equality, Show is used to display the data type in the console
+samSmith = Employee {name = "Sam Smith", position = "Manager", idNum = 1000} -- Create an Employee with the values "Sam Smith" NAME, "Manager" POSITION, and 1000 ID
+pamMarx = Employee {name = "Pam Marx", position = "Sales", idNum = 1001} -- Create an Employee with the values "Pam Marx" NAME, "Sales" POSITION, and 1001 ID
+
+isSamPam = samSmith == pamMarx -- False, compare the two Employees
+
+samSmithData = show samSmith -- "Employee {name = \"Sam Smith\", position = \"Manager\", idNum = 1000}", display the Employee in the console
+
+data ShirtSize = S | M | L -- Data type declaration, ShirtSize is a type that can be S, M, or L
+
+-- CUSTOM EQUALITY TYPECLASS
+instance Eq ShirtSize where -- Overriding the equality function for ShirtSize
+    S == S = True -- If the ShirtSize is S, return True
+    M == M = True -- If the ShirtSize is M, return True
+    L == L = True -- If the ShirtSize is L, return True
+    _ == _ = False -- Catch all case, if the ShirtSize is not S, M, or L, return False
+
+-- CUSTOM SHOW TYPECLASS
+instance Show ShirtSize where -- Overriding the show function for ShirtSize
+    show S = "Small" -- If the ShirtSize is S, return "Small"
+    show M = "Medium" -- If the ShirtSize is M, return "Medium"
+    show L = "Large" -- If the ShirtSize is L, return "Large"
+
+smallAvail = S `elem` [S, M, L] -- True, check if S is in the list
+theSize = show S -- "Small", display the ShirtSize in the console
+
+-- CUSTOM TYPE CLASSES (INTERFACES)
+class MyEq a where -- Type class declaration, MyEq is a type class that takes a type a
+    areEqual :: a -> a -> Bool -- Function declaration, takes two values of type a and returns a Bool. Must be implemented by the instances of the type class
+
+instance MyEq ShirtSize where
+    areEqual S S = True -- If the ShirtSize is S, return True
+    areEqual M M = True -- If the ShirtSize is M, return True
+    areEqual L L = True -- If the ShirtSize is L, return True
+    areEqual _ _ = False -- Catch all case, if the ShirtSize is not S, M, or L, return False
+
+newSize = areEqual M M -- True, check if M is equal to M
+
+-- FILE I/O
+-- import System.IO
+sayHello = do -- do is used to define a block of code/actions
+    putStrLn "What's your name?" -- putStrLn is used to print a string to the console
+    name <- getLine -- getLine is used to get input from the user
+    putStrLn $ "Hello " ++ name -- Concatenate the string with the input from the user
+    -- e.g. sayHello -> What's your name? -> John -> Hello John
+
+writeToFile = do
+    theFile <- openFile "test.txt" WriteMode -- Open the file in WriteMode
+    hPutStrLn theFile ("Random line of text") -- Write to the file
+    hClose theFile -- Close the file
+    -- e.g. writeToFile -> Creates a file called test.txt with the text "Random line of text"
+
+readFromFile = do
+    theFile2 <- openFile "test.txt" ReadMode -- Open the file in ReadMode
+    contents <- hGetContents theFile2 -- Get the contents of the file
+    putStr contents -- Print the contents of the file
+    hClose theFile2 -- Close the file
+    -- e.g. readFromFile -> Reads the contents of the file test.txt
+
+-- FIBONACCI SEQUENCE
+fib = 1 : 1 : [a + b | (a, b) <- zip fib (tail fib)] -- Infinite list of Fibonacci numbers
+{-
+    zip combines the elements of two lists into a list of tuples
+    tail returns all the elements of the list except the first one
+    e.g. take 10 fib -> [1,1,2,3,5,8,13,21,34,55]
+    SAMPLE DRY RUN:
+    1. fib = 1 and (tail fib) = 1
+        [1, 1, 2] : a: 1 + b: 1 = 2
+
+    2. fib = 1 and (tail fib) = 2
+        [1, 1, 2, 3] : a: 1 + b: 2 = 3
+-}
+fib300 = fib !! 300 -- 222232244629420445529739893461909967206666939096499764990979600, get the value at index 300
 
 -- MAIN FUNCTION
 {-
@@ -226,6 +434,4 @@ getFirstItem all@(x:xs) = "The first letter in " ++ all ++ " is " ++ [x] -- If t
     3. Type ./haskell-tut
 -}
 main = do
-    putStrLn "What's your name?" -- putStrLn is used to print a string to the console
-    name <- getLine -- getLine is used to get input from the user
-    putStrLn ("Hello " ++ name) -- Concatenate the string with the input from the user
+    putStrLn "Hello, World" -- Print "Hello, World" to the console
