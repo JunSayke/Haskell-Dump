@@ -8,6 +8,8 @@ A great language to learn to get better at programming
 Extremely safe/strict language does it's best to cut out any potential errors
 Type Inference - Haskell can determine the type of the variable stored in it but it is recommended to declare the type of the variable
 Statically Typed - Once a type is assigned to a variable, it cannot be switched
+Everything is an Expression In Haskell, all functions are expressions that evaluate to a single value. The "return value" is just the result of evaluating the function body.
+The Last Expression The value of a function is the value of the last (or only) expression in its definition.
 
 Setup:
 1. Install Haskell Platform
@@ -26,6 +28,7 @@ Basic Commands:
 References:
 https://learnyouahaskell.com/chapters
 https://youtu.be/02_H3LjqMr8?si=ziU63Rf7kov1N3Ce
+https://devdocs.io/haskell/
 -}
 
 -- MODULES

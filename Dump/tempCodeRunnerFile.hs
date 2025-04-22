@@ -1,0 +1,1 @@
+fact3 n = if n == 0 then 1 else n * fact3 (n-1)

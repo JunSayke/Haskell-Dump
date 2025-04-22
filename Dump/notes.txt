@@ -1,0 +1,53 @@
+How Haskell handle Stack overflow?
+* Tail Recursion / Tail Call Optimization
+* Lazy Evaluation
+
+where vs let?
+let can be used anywhere in an expression, while where comes after the function definition.
+let is more flexible for local definitions, whereas where is more structured and often used for helper functions or values in a function.
+
+print vs putStrLn?
+print converts its argument to a string and then outputs it with a newline at the end.
+putStrLn specifically outputs a string followed by a newline, but it does not convert non-string values (so you must provide a string).
+While both print to the console, print is more flexible since it handles all types, whereas putStrLn expects a string input directly.
+
+A monad is a design pattern in functional programming that helps manage side effects (like input/output or state changes) in a clean and predictable way. Think of it as a container that wraps around values, allowing you to apply functions to those values without worrying about the side effects. A functor is a simpler concept that is part of a monad: it's a container that lets you apply a function to the value inside, like a box you can open and change the content inside. A monad takes this further by adding the ability to chain operations together, ensuring the side effects are handled properly at each step. So, a monad is like a functor with a special way of combining multiple steps, ensuring that everything happens in a controlled and consistent manner.
+
+Haskell Review:
+
+1. Readability: 7/10
+Haskell's syntax is concise and elegant, but its heavy reliance on abstract concepts like monads and lazy evaluation can make it challenging to fully grasp for beginners. However, for those familiar with functional programming, Haskell can be very readable and expressive.
+
+2. Writability: 6/10
+While Haskell allows expressing complex logic concisely, it often requires advanced understanding of functional concepts to write efficiently, especially for beginners. For example, recursion and higher-order functions can sometimes make code harder to write quickly compared to more imperative languages.
+
+3. Reliability: 9/10
+Haskell's strong static typing system and purely functional nature significantly reduce errors at compile time. The language's immutability and lack of side effects make it highly reliable for preventing common programming mistakes, though debugging lazy evaluation can be tricky.
+
+4. Efficiency: 7/10
+Haskell can be efficient for certain tasks, especially with strict evaluation and optimization, but its lazy evaluation model can sometimes lead to inefficiencies, especially in memory usage. For real-time or high-performance applications, its runtime may be slower than more imperative languages.
+
+5. Portability: 8/10
+Haskell can run on multiple platforms, and there are cross-platform compilers like GHC. However, because it relies on specific runtime systems, some configurations might not be as seamless across platforms, especially when working with certain libraries or native system interfaces.
+
+6. Compatibility: 6/10
+Haskell’s compatibility with other languages can be limited compared to languages designed with interoperability in mind (like Python or Java). While it has tools for FFI (Foreign Function Interface) and can interact with C and other languages, working with existing systems may require more effort.
+
+7. Usability: 5/10
+Haskell can be difficult for beginners due to its abstract nature and the learning curve associated with its functional paradigm. Concepts like monads, immutability, and type inference can be hard to grasp, which might make Haskell harder to learn and use for new programmers.
+
+8. Productivity: 6/10
+Haskell has powerful tools, like its type system and compiler optimizations, that help catch errors early, which could speed up development. However, it lacks the wide range of libraries and IDE support that more mainstream languages have, and certain tasks may require more manual work, slowing productivity.
+
+9. Other Important Factors:
+Community Support: 8/10
+Haskell has a dedicated, knowledgeable community, but it's not as large as those for more mainstream languages. It provides great resources, though it can be harder to find help for beginners.
+
+Scalability: 7/10
+Haskell is good for large-scale systems, especially those involving concurrent or distributed computation. However, certain industries and projects may not be able to fully leverage Haskell's strengths due to the learning curve and ecosystem limitations.
+
+Cross-platform Support: 8/10
+Haskell supports multiple operating systems and architectures, but the lack of native support for some libraries may cause challenges.
+
+Cost: 7/10
+Haskell is free to use, but tools and libraries are fewer than in more mainstream languages. The learning curve and time investment could lead to higher costs in terms of developer time.
